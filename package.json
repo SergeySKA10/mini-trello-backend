@@ -1,0 +1,30 @@
+{
+    "name": "mini-trello-backend",
+    "version": "1.0.0",
+    "description": "Backend for Mini-Trello app",
+    "main": "server/index.ts",
+    "scripts": {
+        "dev": "nodemon",
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate": "prisma migrate dev"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.14.0",
+        "cors": "^2.8.5",
+        "express": "^5.1.0"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/node": "^20.0.0",
+        "nodemon": "^3.1.10",
+        "prisma": "^6.14.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.0.0"
+    },
+    "prisma": {
+        "schema": "prisma/schema.prisma"
+    }
+}
