@@ -2,6 +2,8 @@
     "compilerOptions": {
         "target": "es2020",
         "lib": ["dom", "dom.iterable", "esnext"],
+        "types": ["node", "express"],
+        "allowImportingTsExtensions": true,
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
@@ -22,6 +24,12 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts",
+        "server/config/db.js"
+    ],
     "exclude": ["node_modules"]
 }
