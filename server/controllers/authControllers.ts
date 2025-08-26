@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../config/db';
 import { AuthResponse, LoginRequest, RegisterRequests } from '../types';
-import { error } from 'console';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const SALT_ROUNDS = 12;

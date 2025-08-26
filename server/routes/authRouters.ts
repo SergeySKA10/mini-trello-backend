@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { register, login } from '../controllers/authControllers';
 import { validateData } from '../middleware/validation';
-import { email, z } from 'zod';
+import { z } from 'zod';
 
 const router = Router();
 

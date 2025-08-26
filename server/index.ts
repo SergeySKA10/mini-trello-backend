@@ -18,13 +18,21 @@ app.use(
     })
 );
 
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Test route works!' });
+});
+
 // роуты
-app.use('api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
 // защищенный роут для теста
-app.get('api/profile', authenticateToken, (req: AuthRequest, res: Response) => {
-    res.json({ user: req.user });
-});
+app.get(
+    '/api/profile',
+    authenticateToken,
+    (req: AuthRequest, res: Response) => {
+        res.json({ user: req.user });
+    }
+);
 
 // Обработка 404
 app.use('*', (req, res) => {
