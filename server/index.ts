@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import { prisma } from './config/db'; // Импорт Prisma
+import authRoutes from './routes/authRouters';
+import { authenticateToken, AuthRequest } from './middleware/auth';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,35 +18,12 @@ app.use(
     })
 );
 
-// Тестовый роут для проверки БД
-app.get('/api/test-db', async (req, res) => {
-    try {
-        const result = await prisma.$queryRaw`SELECT 1 as test`;
-        res.json({
-            status: 'DB connection successful',
-            data: result,
-        });
-    } catch (error) {
-        console.error('Database error:', error);
+// роуты
+app.use('api/auth', authRoutes);
 
-        if (error instanceof Error) {
-            res.status(500).json({
-                status: 'DB connection failed',
-                error:
-                    process.env.NODE_ENV === 'development'
-                        ? error.message
-                        : 'Internal server error',
-            });
-        }
-    }
-});
-
-// Простой тестовый роут
-app.get('/api/hello', (req, res) => {
-    res.json({
-        message: 'Hello from Express!',
-        timestamp: new Date().toISOString(),
-    });
+// защищенный роут для теста
+app.get('api/profile', authenticateToken, (req: AuthRequest, res: Response) => {
+    res.json({ user: req.user });
 });
 
 // Обработка 404
