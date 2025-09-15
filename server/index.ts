@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRouters';
-import oauthRoutes from './routes/authRouters';
+import oauthRoutes from './routes/oauthRoutes';
 import { authenticateToken, AuthRequest } from './middleware/auth';
 
 const app = express();
@@ -23,8 +23,11 @@ app.get('/api/test', (req, res) => {
     res.json({ message: 'Test route works!' });
 });
 
-// роуты
+// Роуты аутентификации
 app.use('/api/auth', authRoutes);
+
+// Oauth роуты
+app.use('/api/oauth', oauthRoutes);
 
 // защищенный роут для теста
 app.get(
@@ -34,8 +37,6 @@ app.get(
         res.json({ user: req.user });
     }
 );
-
-app.use('/api/oauth', oauthRoutes);
 
 // Обработка 404
 app.use('*', (req, res) => {
