@@ -12,11 +12,13 @@ export class BoardController {
                 where: { userId: req.user!.id },
                 include: {
                     columns: {
-                        include: { cards: { orderBy: { order: 'asc' } } },
+                        include: {
+                            cards: { orderBy: { order: 'asc' as const } },
+                        },
                         orderBy: { order: 'asc' },
                     },
                 },
-                orderBy: { createdAt: 'desc' },
+                orderBy: { createdAt: 'desc' as const },
             });
 
             res.json(boards);
@@ -31,11 +33,13 @@ export class BoardController {
             const board = await prisma.board.findFirst({
                 where: {
                     id: req.params.id,
-                    userId: req.user!.id,
+                    user: { id: req.user!.id },
                 },
                 include: {
                     columns: {
-                        include: { cards: { orderBy: { order: 'asc' } } },
+                        include: {
+                            cards: { orderBy: { order: 'asc' as const } },
+                        },
                         orderBy: { order: 'asc' },
                     },
                 },
@@ -54,12 +58,17 @@ export class BoardController {
     // POST /api/boards - создание доски
     static async createBoard(req: AuthRequest, res: Response) {
         try {
-            const validatedData = CreateBoardDto.parse(req.body);
+            const validatedData = CreateBoardDto.parse(req.body) as {
+                title: string;
+                description?: string | null;
+            };
 
             const board = await prisma.board.create({
                 data: {
                     ...validatedData,
-                    userId: req.user!.id,
+                    user: {
+                        connect: { id: req.user!.id },
+                    },
                     columns: {
                         create: [
                             { title: 'To Do', order: 0 },
@@ -93,12 +102,14 @@ export class BoardController {
             const board = await prisma.board.update({
                 where: {
                     id: req.params.id,
-                    userId: req.user!.id,
+                    user: { id: req.user!.id },
                 },
                 data: validatedData,
                 include: {
                     columns: {
-                        include: { cards: { orderBy: { order: 'asc' } } },
+                        include: {
+                            cards: { orderBy: { order: 'asc' as const } },
+                        },
                         orderBy: { order: 'asc' },
                     },
                 },
@@ -119,7 +130,7 @@ export class BoardController {
             await prisma.board.delete({
                 where: {
                     id: req.params.id,
-                    userId: req.user!.id,
+                    user: { id: req.user!.id },
                 },
             });
 

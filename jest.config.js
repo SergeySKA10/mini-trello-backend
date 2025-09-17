@@ -3,4 +3,6 @@ module.exports = {
     testEnvironment: 'node',
     setupFilesAfterEnv: ['<rootDir>/server/tests/setup.ts'],
     testMatch: ['**/server/tests/**/*.test.ts'],
+    forceExit: true,
+    detectOpenHandles: true,
 };
