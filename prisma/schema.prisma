@@ -36,6 +36,10 @@ model Board {
   columns     Column[]
   userId      String
   user        User   @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("boards")
 }
 
 model Column {
@@ -45,13 +49,22 @@ model Column {
   cards   Card[]
   boardId String
   board   Board  @relation(fields: [boardId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("columns")
 }
 
 model Card {
   id       String @id @default(uuid())
   title    String
   content  String?
+  order   Int
   deadline DateTime?
   columnId String
   column   Column @relation(fields: [columnId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("cards")
 }
