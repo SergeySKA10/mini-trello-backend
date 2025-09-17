@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRouters';
 import oauthRoutes from './routes/oauthRoutes';
+import boardRoutes from './routes/boardRoutes';
 import { authenticateToken, AuthRequest } from './middleware/auth';
 
 const app = express();
@@ -37,6 +38,8 @@ app.get(
         res.json({ user: req.user });
     }
 );
+
+app.use('/api/boards', boardRoutes);
 
 // Обработка 404
 app.use('*', (req, res) => {
