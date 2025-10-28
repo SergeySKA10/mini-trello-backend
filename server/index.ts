@@ -3,6 +3,8 @@ import cors from 'cors';
 import authRoutes from './routes/authRouters';
 import oauthRoutes from './routes/oauthRoutes';
 import boardRoutes from './routes/boardRoutes';
+import columnRoutes from './routes/columnRoutes';
+import cardRoutes from './routes/cardRoutes';
 import { authenticateToken, AuthRequest } from './middleware/auth';
 
 const app = express();
@@ -40,6 +42,8 @@ app.get(
 );
 
 app.use('/api/boards', boardRoutes);
+app.use('/api', columnRoutes);
+app.use('/api', cardRoutes);
 
 // Обработка 404
 app.use('*', (req, res) => {
