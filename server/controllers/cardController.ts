@@ -9,6 +9,8 @@ export class CardController {
             const { columnId } = req.params;
             const userId = (req as any).user.userId;
 
+            console.log('Get cards for column:', columnId, 'user:', userId);
+
             // Проверяем права доступа к колонке
             const column = await prisma.column.findFirst({
                 where: {
@@ -20,10 +22,12 @@ export class CardController {
             });
 
             if (!column) {
+                console.log('Column not found');
                 return res.status(404).json({ message: 'Column not found' });
             }
 
             if (column.board.userId !== userId) {
+                console.log('Access denied - user does not own board');
                 return res.status(403).json({ message: 'Access denied' });
             }
 
@@ -36,6 +40,7 @@ export class CardController {
                 },
             });
 
+            console.log('Found cards:', cards.length);
             res.json(cards);
         } catch (error) {
             console.error('Get cards error:', error);
@@ -50,6 +55,15 @@ export class CardController {
             const cardData: CreateCardDto = req.body;
             const userId = (req as any).user.userId;
 
+            console.log(
+                'Create card for column:',
+                columnId,
+                'data:',
+                cardData,
+                'user:',
+                userId
+            );
+
             // Проверяем права доступа к колонке
             const column = await prisma.column.findFirst({
                 where: {
@@ -61,10 +75,12 @@ export class CardController {
             });
 
             if (!column) {
+                console.log('Column not found for card creation');
                 return res.status(404).json({ message: 'Column not found' });
             }
 
             if (column.board.userId !== userId) {
+                console.log('Access denied for card creation');
                 return res.status(403).json({ message: 'Access denied' });
             }
 
@@ -75,6 +91,7 @@ export class CardController {
                 },
             });
 
+            console.log('Card created:', card.id);
             res.status(201).json(card);
         } catch (error) {
             console.error('Create card error:', error);
@@ -88,6 +105,7 @@ export class CardController {
             const { id } = req.params;
             const cardData: UpdateCardDto = req.body;
             const userId = (req as any).user.userId;
+            console.log('Update card:', id, 'data:', cardData, 'user:', userId);
 
             // Находим карточку и проверяем права доступа
             const card = await prisma.card.findFirst({
@@ -104,10 +122,12 @@ export class CardController {
             });
 
             if (!card) {
+                console.log('Card not found for update:', id);
                 return res.status(404).json({ message: 'Card not found' });
             }
 
             if (card.column.board.userId !== userId) {
+                console.log('Access denied for card update');
                 return res.status(403).json({ message: 'Access denied' });
             }
 
@@ -118,6 +138,7 @@ export class CardController {
                 data: cardData,
             });
 
+            console.log('Card updated:', updatedCard.id);
             res.json(updatedCard);
         } catch (error) {
             console.error('Update card error:', error);
@@ -130,6 +151,7 @@ export class CardController {
         try {
             const { id } = req.params;
             const userId = (req as any).user.userId;
+            console.log('Delete card:', id, 'user:', userId);
 
             // Находим карточку и проверяем права доступа
             const card = await prisma.card.findFirst({
@@ -146,10 +168,12 @@ export class CardController {
             });
 
             if (!card) {
+                console.log('Card not found for deletion:', id);
                 return res.status(404).json({ message: 'Card not found' });
             }
 
             if (card.column.board.userId !== userId) {
+                console.log('Access denied for card deletion');
                 return res.status(403).json({ message: 'Access denied' });
             }
 
@@ -159,6 +183,7 @@ export class CardController {
                 },
             });
 
+            console.log('Card deleted:', id);
             res.status(204).send();
         } catch (error) {
             console.error('Delete card error:', error);
@@ -172,6 +197,14 @@ export class CardController {
             const { cardId } = req.params;
             const moveData: MoveCardDto = req.body;
             const userId = (req as any).user.userId;
+            console.log(
+                'Move card:',
+                cardId,
+                'data:',
+                moveData,
+                'user:',
+                userId
+            );
 
             // Находим карточку и проверяем права доступа
             const card = await prisma.card.findFirst({
@@ -188,10 +221,12 @@ export class CardController {
             });
 
             if (!card) {
+                console.log('Card not found for move:', cardId);
                 return res.status(404).json({ message: 'Card not found' });
             }
 
             if (card.column.board.userId !== userId) {
+                console.log('Access denied for card move');
                 return res.status(403).json({ message: 'Access denied' });
             }
 
@@ -206,12 +241,14 @@ export class CardController {
             });
 
             if (!targetColumn) {
+                console.log('Target column not found:', moveData.toColumnId);
                 return res
                     .status(404)
                     .json({ message: 'Target column not found' });
             }
 
             if (targetColumn.board.userId !== userId) {
+                console.log('Access denied to target column');
                 return res
                     .status(403)
                     .json({ message: 'Access denied to target column' });
@@ -260,6 +297,7 @@ export class CardController {
                 },
             });
 
+            console.log('Card moved successfully:', movedCard.id);
             res.json(movedCard);
         } catch (error) {
             console.error('Move card error:', error);
